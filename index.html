@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta property="og:title" content="Evolución de la IA - Línea de Tiempo Interactiva">
+    <meta property="og:description" content="Recorre 70 años de historia de la Inteligencia Artificial con explicaciones detalladas">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://TU-USUARIO.github.io/evolucion-ia-linea-tiempo/preview.jpg">
+    <title>Evolución de la IA | Línea de Tiempo Interactiva + Explicaciones Detalladas</title>
+    <!-- Bootstrap 5 CSS + Icons + Animate.css -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<link rel="icon" type="image/png" href="https://img.icons8.com/fluency/96/artificial-intelligence.png">    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fc 0%, #e9eef4 100%);
+            color: #1a2a2a;
+            overflow-x: hidden;
+        }
+
+        /* Hero mejorado con ajustes móviles */
+        .hero-gradient {
+            background: linear-gradient(125deg, #0a2f28 0%, #115e4a 50%, #0a2f28 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-gradient::before {
+            content: "🧠";
+            font-size: 22rem;
+            position: absolute;
+            bottom: -80px;
+            right: -80px;
+            opacity: 0.08;
+            pointer-events: none;
+        }
+
+        /* Tarjetas de línea de tiempo */
+        .timeline-card {
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.08);
+            height: 100%;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .timeline-card:hover {
+            transform: translateY(-12px) scale(1.01);
+            box-shadow: 0 25px 40px -12px rgba(0,0,0,0.25);
+            border-color: rgba(30, 74, 59, 0.3);
+        }
+        .timeline-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #ffb347, #ff8c1a, #e67e22);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+            transform-origin: left;
+        }
+        .timeline-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .category-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.35rem 1rem;
+            border-radius: 40px;
+            background: #eef2ff;
+            color: #1e4a3b;
+            letter-spacing: -0.2px;
+        }
+
+        .year-badge-large {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1e4a3b, #2c7a5e);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            line-height: 1;
+        }
+
+        .icon-hover {
+            transition: transform 0.2s;
+        }
+        .timeline-card:hover .icon-hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* Modal personalizado */
+        .modal-ia {
+            border-radius: 2rem;
+        }
+        .modal-ia .modal-content {
+            border-radius: 1.8rem;
+            border: none;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.3);
+        }
+
+        /* Filtros activos */
+        .filter-btn {
+            border-radius: 60px;
+            padding: 0.5rem 1.3rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin: 0.2rem;
+            font-size: 0.85rem;
+        }
+        .filter-btn.active {
+            background: #1e4a3b !important;
+            color: white !important;
+            border-color: #1e4a3b !important;
+            box-shadow: 0 4px 12px rgba(30,74,59,0.3);
+        }
+
+        .decade-marker {
+            font-weight: 800;
+            font-size: 1.8rem;
+            background: linear-gradient(120deg, #1e4a3b, #3b8b6e);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            border-left: 5px solid #ffb347;
+            padding-left: 1.2rem;
+            margin: 2rem 0 1.5rem 0;
+        }
+
+        /* Scroll top */
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #1e4a3b;
+            color: white;
+            width: 52px;
+            height: 52px;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            cursor: pointer;
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            border: none;
+        }
+        .scroll-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .scroll-top:hover {
+            background: #ff8c1a;
+            transform: scale(1.1);
+        }
+
+        /* ========== MEJORAS PARA MÓVILES ========== */
+        @media (max-width: 768px) {
+            /* Ajuste del badge principal para que se vea completo en móviles */
+            .hero-badge-mobile {
+                display: inline-flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                gap: 0.35rem;
+                font-size: 0.75rem;
+                padding: 0.5rem 1rem;
+                white-space: normal;
+                word-break: break-word;
+                text-align: center;
+                line-height: 1.3;
+                max-width: 100%;
+            }
+            
+            /* Ajuste del título principal */
+            .hero-gradient h1 {
+                font-size: 2.2rem !important;
+                line-height: 1.2;
+            }
+            
+            .hero-gradient .display-3 {
+                font-size: 2rem !important;
+            }
+            
+            /* Ajuste del texto lead */
+            .hero-gradient .lead {
+                font-size: 1rem !important;
+                line-height: 1.4;
+            }
+            
+            /* Botones más compactos en móvil */
+            .hero-gradient .btn-lg {
+                padding: 0.5rem 1.2rem !important;
+                font-size: 0.9rem !important;
+            }
+            
+            /* Ajuste de las tarjetas */
+            .year-badge-large {
+                font-size: 1.4rem;
+            }
+            
+            .decade-marker {
+                font-size: 1.3rem;
+                padding-left: 0.8rem;
+                margin: 1.5rem 0 1rem 0;
+            }
+            
+            .timeline-card .card-title {
+                font-size: 1.1rem;
+            }
+            
+            .timeline-card .card-text {
+                font-size: 0.85rem;
+            }
+            
+            .category-badge {
+                font-size: 0.65rem;
+                padding: 0.25rem 0.8rem;
+            }
+            
+            /* Ajuste de los filtros para que no se desborden */
+            .filter-btn {
+                padding: 0.4rem 0.9rem;
+                font-size: 0.75rem;
+                margin: 0.15rem;
+            }
+            
+            /* Ajuste del contenedor hero */
+            .hero-gradient .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .hero-gradient .py-4 {
+                padding-top: 1rem !important;
+                padding-bottom: 1rem !important;
+            }
+            
+            .hero-gradient .py-5 {
+                padding-top: 2rem !important;
+                padding-bottom: 2rem !important;
+            }
+            
+            /* Ajuste de la sección de estadísticas */
+            .stat-card h3 {
+                font-size: 1.2rem;
+            }
+            
+            .stat-card p {
+                font-size: 0.85rem;
+            }
+            
+            /* Ajuste del texto de la línea de tiempo */
+            #timeline .lead {
+                font-size: 0.95rem;
+                width: 95% !important;
+            }
+            
+            #timeline h2.display-5 {
+                font-size: 1.8rem;
+            }
+            
+            /* Espaciado general */
+            .container {
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+            }
+        }
+
+        /* Para pantallas muy pequeñas (menos de 480px) */
+        @media (max-width: 480px) {
+            .hero-badge-mobile {
+                font-size: 0.7rem;
+                padding: 0.4rem 0.8rem;
+            }
+            
+            .hero-gradient h1 {
+                font-size: 1.8rem !important;
+            }
+            
+            .hero-gradient .btn {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            
+            .hero-gradient .d-flex {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .hero-gradient .d-flex a,
+            .hero-gradient .d-flex button {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .filter-btn {
+                padding: 0.35rem 0.7rem;
+                font-size: 0.7rem;
+            }
+        }
+        
+        /* Ajustes adicionales para el badge con ícono */
+        .badge-ia-mobile {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #ffc107;
+            color: #1e2a2a;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<!-- HERO mejorado con ajustes móviles -->
+<section class="hero-gradient py-5">
+    <div class="container py-3 py-md-4">
+        <div class="row align-items-center g-4 g-md-5">
+            <div class="col-12 col-lg-7 animate__animated animate__fadeInUp">
+                <!-- Badge principal optimizado para móviles -->
+                <div class="d-flex justify-content-center justify-content-lg-start mb-3">
+                    <span class="badge bg-warning text-dark px-3 px-md-4 py-2 rounded-pill fs-6 fw-semibold" style="white-space: normal; word-break: keep-all; display: inline-flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                        <i class="bi bi-cpu me-1"></i> 
+                        <span>Ingeniería de Sistemas</span>
+                        <span class="d-none d-sm-inline">·</span>
+                        <span class="d-inline d-sm-inline">VII Semestre</span>
+                        <span class="d-none d-sm-inline">·</span>
+                        <span>IA</span>
+                    </span>
+                </div>
+                
+                <h1 class="fw-bold mb-3 text-center text-lg-start" style="font-size: clamp(1.8rem, 8vw, 3rem);">
+                    Evolución de la <br><span class="text-warning">Inteligencia Artificial</span>
+                </h1>
+                
+                <p class="lead fs-5 fs-md-4 text-center text-lg-start px-2 px-md-0">
+                    Recorrido interactivo por más de 70 años de innovación: desde el Test de Turing hasta los agentes autónomos. Cada hito incluye explicaciones profundas para entender el contexto y el impacto real.
+                </p>
+                
+                <div class="d-flex flex-column flex-sm-row gap-3 mt-4 justify-content-center justify-content-lg-start">
+                    <a href="#timeline" class="btn btn-light rounded-pill px-4 px-md-5 py-2 py-md-3 fw-semibold" style="font-size: clamp(0.9rem, 4vw, 1.1rem);">
+                        <i class="bi bi-clock-history me-2"></i>Explorar hitos
+                    </a>
+                    <button class="btn btn-outline-warning rounded-pill px-4 px-md-5 py-2 py-md-3 fw-semibold" style="font-size: clamp(0.9rem, 4vw, 1.1rem);" data-bs-toggle="modal" data-bs-target="#infoModal">
+                        <i class="bi bi-lightbulb me-2"></i>¿Por qué es importante?
+                    </button>
+                </div>
+            </div>
+            <div class="col-12 col-lg-5 text-center animate__animated animate__fadeInRight mt-4 mt-lg-0">
+                <div class="d-flex justify-content-center gap-2 gap-md-3">
+                    <i class="bi bi-robot display-3 display-md-1 text-warning"></i>
+                    <i class="bi bi-graph-up display-3 display-md-1 text-light opacity-75"></i>
+                    <i class="bi bi-chat-dots-fill display-3 display-md-1 text-warning"></i>
+                </div>
+                <p class="mt-3 small opacity-75">De los sistemas simbólicos a los grandes modelos de lenguaje</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Sección de línea de tiempo principal -->
+<section id="timeline" class="container my-4 my-md-5 pt-3 pt-md-4">
+    <div class="text-center mb-4 mb-md-5">
+        <h2 class="fw-bold" style="font-size: clamp(1.6rem, 6vw, 2.5rem);">
+            <i class="bi bi-timeline me-2 me-md-3 text-success"></i>Línea del tiempo interactiva
+        </h2>
+        <p class="lead text-secondary mx-auto px-3" style="font-size: clamp(0.9rem, 4vw, 1.2rem); max-width: 90%;">
+            Haz clic en cualquier tarjeta para obtener una explicación detallada del concepto, su importancia y legado. Filtra por épocas para explorar ciclos clave.
+        </p>
+        <!-- Filtros dinámicos mejorados para móviles -->
+        <div class="d-flex flex-wrap justify-content-center gap-1 gap-md-2 mt-3 mt-md-4" id="filterGroup">
+            <button class="filter-btn btn btn-outline-secondary active" data-filter="all">✨ Todos</button>
+            <button class="filter-btn btn btn-outline-secondary" data-filter="filosofia">🧠 Filosofía</button>
+            <button class="filter-btn btn btn-outline-secondary" data-filter="auge">📈 Auge</button>
+            <button class="filter-btn btn btn-outline-secondary" data-filter="invierno">❄️ Inviernos</button>
+            <button class="filter-btn btn btn-outline-secondary" data-filter="deep">⚡ Deep Learning</button>
+            <button class="filter-btn btn btn-outline-secondary" data-filter="llm">🚀 Grandes Modelos</button>
+        </div>
+    </div>
+
+    <div class="row g-3 g-md-4" id="timelineContainer">
+        <!-- Cargado dinámicamente con JS -->
+    </div>
+    <div class="text-center mt-3 mt-md-4">
+        <i class="bi bi-hand-index-thumb"></i> <span class="text-muted small">Clic en cada hito para acceder a explicaciones más profundas</span>
+    </div>
+</section>
+
+<!-- Sección de estadísticas o datos curiosos -->
+<section class="container my-4 my-md-5">
+    <div class="row g-3 g-md-4">
+        <div class="col-12 col-md-4">
+            <div class="bg-white p-3 p-md-4 rounded-4 text-center shadow-sm h-100">
+                <i class="bi bi-database fs-1 text-success"></i>
+                <h3 class="fs-5 fs-md-4 fw-bold mt-2">1956 → 2026</h3>
+                <p class="small small-md">70 años de evolución desde Dartmouth hasta los modelos con cientos de miles de millones de parámetros.</p>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="bg-white p-3 p-md-4 rounded-4 text-center shadow-sm h-100">
+                <i class="bi bi-graph-up fs-1 text-warning"></i>
+                <h3 class="fs-5 fs-md-4 fw-bold mt-2">+200% anual</h3>
+                <p class="small small-md">Crecimiento en publicaciones de IA en la última década. El deep learning revolucionó industrias.</p>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="bg-white p-3 p-md-4 rounded-4 text-center shadow-sm h-100">
+                <i class="bi bi-people fs-1 text-info"></i>
+                <h3 class="fs-5 fs-md-4 fw-bold mt-2">IA Generativa</h3>
+                <p class="small small-md">Más de 100M usuarios en los primeros 2 meses de ChatGPT, la adopción más rápida de la historia tech.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal para explicaciones extendidas -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content modal-ia">
+            <div class="modal-header border-0 bg-success bg-opacity-10">
+                <h5 class="modal-title fw-bold" id="detailModalLabel"><i class="bi bi-info-circle-fill me-2 text-success"></i>Explicación detallada</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-3 p-md-4" id="modalBodyContent">
+                <!-- Contenido dinámico -->
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal extra informativo -->
+<div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title">Importancia académica</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Comprender la trayectoria de la Inteligencia Artificial es fundamental para contextualizar las arquitecturas que definen nuestra era, como las redes neuronales profundas y los modelos tipo Transformer. Analizar los ciclos históricos —incluyendo los llamados "inviernos de la IA"— nos permite gestionar expectativas realistas frente a los desafíos éticos y técnicos actuales.
+
+Hoy, como protagonistas de la Cuarta Revolución Industrial, navegamos una línea de tiempo técnica que ha madurado significativamente: desde la concepción inicial del perceptrón hasta la sofisticación de los modelos multimodales contemporáneos.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="bg-dark text-white-50 py-3 py-md-4 mt-4 mt-md-5">
+    <div class="container text-center">
+        <i class="bi bi-robot fs-3"></i>
+        <p class="mt-2 mb-0 small">Línea de tiempo interactiva · IA explicada con profundidad · Proyecto académico</p>
+        <small class="small">Basado en hitos históricos verificados · Diseño interactivo con Bootstrap 5 y JS puro</small>
+    </div>
+</footer>
+
+<div class="scroll-top" id="scrollTopBtn">
+    <i class="bi bi-arrow-up-short"></i>
+</div>
+
+<script>
+    // DATOS ENRIQUECIDOS con explicaciones más profundas
+    const timelineData = [
+        { year: "1950", title: "Test de Turing", shortDesc: "Propuesta de Alan Turing para evaluar inteligencia en máquinas.", longDesc: "Alan Turing publicó 'Computing Machinery and Intelligence' donde planteó: si una máquina puede conversar indistinguible de un humano, es inteligente. Este test sentó las bases filosóficas de la IA, cambiando el enfoque de '¿puede pensar?' a '¿puede simular pensamiento?'. Sigue siendo un referente ético.", category: "filosofia", era: "Fundación", icon: "bi bi-quote", color: "#4a6a5e" },
+        { year: "1956", title: "Conferencia Dartmouth", shortDesc: "Nacimiento oficial de la IA como campo de estudio.", longDesc: "John McCarthy, Marvin Minsky, Claude Shannon y otros se reunieron durante 8 semanas. Allí se acuñó el término 'Inteligencia Artificial'. El optimismo era enorme: se creía que en una década se resolverían problemas complejos. Marcó el inicio de la investigación organizada.", category: "filosofia", era: "Origen", icon: "bi bi-mic", color: "#3b6e5c" },
+        { year: "1957", title: "Perceptrón", shortDesc: "Primera red neuronal artificial entrenable.", longDesc: "Frank Rosenblatt creó el Mark I Perceptrón, capaz de aprender a clasificar patrones simples. Fue la base del conexionismo. Aunque luego Minsky mostró sus limitaciones (XOR), hoy es el abuelo de las redes neuronales modernas.", category: "filosofia", era: "Redes tempranas", icon: "bi bi-diagram-2", color: "#2c7a5e" },
+        { year: "1966", title: "ELIZA", shortDesc: "El primer chatbot de la historia.", longDesc: "Joseph Weizenbaum desarrolló ELIZA en MIT. Simulaba un psicoterapeuta rogeriano usando patrones de coincidencia. Aunque era simple, muchos usuarios le atribuyeron comprensión real. Mostró cómo los humanos antropomorfizan la IA.", category: "filosofia", era: "NLP temprano", icon: "bi bi-chat", color: "#5e8b7a" },
+        { year: "1973", title: "Informe Lighthill", shortDesc: "Crisis financiera que provocó el primer invierno de la IA.", longDesc: "El gobierno británico encargó a Sir James Lighthill evaluar la IA. Su informe fue devastador: criticó logros limitados y recomendó recortar fondos. Estados Unidos también redujo inversiones, causando el primer invierno (1974-80). Lección: las expectativas desmedidas generan escepticismo.", category: "invierno", era: "Crisis", icon: "bi bi-cloud-snow", color: "#6c757d" },
+        { year: "1980", title: "Sistemas Expertos (XCON)", shortDesc: "La era dorada de los sistemas basados en reglas.", longDesc: "XCON de DEC ahorró más de 40 millones de dólares anuales configurando pedidos de computadoras. Los sistemas expertos usaban reglas IF-THEN para emular a expertos humanos. Fueron éxito comercial, pero su mantenimiento era costoso y frágiles ante situaciones nuevas.", category: "auge", era: "Comercial", icon: "bi bi-calculator", color: "#e67e22" },
+        { year: "1986", title: "Backpropagation", shortDesc: "Algoritmo que resucitó las redes neuronales.", longDesc: "Rumelhart, Hinton y Williams popularizaron la retropropagación, permitiendo entrenar redes multicapa eficientemente. Esto resolvió las críticas de Minsky y pavimentó el camino para el deep learning actual. Fue el puente entre los sistemas simbólicos y el conexionismo moderno.", category: "deep", era: "Redes profundas", icon: "bi bi-graph-up", color: "#1e88e5" },
+        { year: "1987", title: "Segundo invierno de la IA", shortDesc: "Colapso del mercado de sistemas expertos.", longDesc: "El hardware especializado (LISP machines) quedó obsoleto, los sistemas expertos eran costosos de mantener y no escalaban. Japón falló en sus metas de Quinta Generación. La inversión colapsó hasta mediados de los 90. Enseñanza: la IA debe demostrar valor práctico robusto.", category: "invierno", era: "Crisis", icon: "bi bi-thermometer-half", color: "#6c757d" },
+        { year: "1997", title: "Deep Blue vs Kasparov", shortDesc: "Primera vez que una máquina vence al campeón mundial de ajedrez.", longDesc: "IBM Deep Blue derrotó a Garry Kasparov usando búsqueda exhaustiva y evaluación heurística. Marcó un hito en IA simbólica y capturó la imaginación pública. Mostró que las máquinas podían superar humanos en juegos de alta complejidad.", category: "auge", era: "Juegos", icon: "bi bi-chess-king", color: "#f39c12" },
+        { year: "2012", title: "AlexNet", shortDesc: "La revolución del deep learning en visión por computadora.", longDesc: "Alex Krizhevsky, Ilya Sutskever y Geoffrey Hinton ganaron ImageNet 2012 con una red CNN profunda. Redujo drásticamente el error y demostró que las GPUs + grandes datasets + redes profundas cambiaban todo. Este momento desencadenó la explosión del deep learning en la industria.", category: "deep", era: "CNN", icon: "bi bi-diagram-3", color: "#9b59b6" },
+        { year: "2014", title: "GANs (Redes Generativas Adversarias)", shortDesc: "Dos redes compitiendo: generador vs discriminador.", longDesc: "Ian Goodfellow creó las GANs, capaces de generar imágenes hiperrealistas, música y datos sintéticos. Han sido fundamentales para la creación de deepfakes, arte generativo y aumento de datos. Un concepto brillante donde la IA 'aprende a crear'.", category: "deep", era: "Generativo", icon: "bi bi-bezier2", color: "#e84393" },
+        { year: "2016", title: "AlphaGo", shortDesc: "La IA conquista el juego de Go, considerado imposible.", longDesc: "DeepMind desarrolló AlphaGo que venció a Lee Sedol, campeón mundial. Go tiene más configuraciones que átomos en el universo. Combinó redes neuronales profundas con búsqueda por Monte Carlo. Hito en inteligencia artificial general aplicada.", category: "deep", era: "Refuerzo", icon: "bi bi-cpu", color: "#2c3e50" },
+        { year: "2017", title: "Transformer", shortDesc: "Arquitectura 'Attention is All You Need' que cambió el NLP.", longDesc: "El paper de Vaswani et al. (Google) introdujo el mecanismo de atención sin recurrencias. Los transformers permitieron paralelización masiva y escalabilidad, dando origen a BERT, GPT y todos los modelos modernos. Es la base de la IA generativa actual.", category: "llm", era: "Transformers", icon: "bi bi-arrow-left-right", color: "#16a085" },
+        { year: "2020", title: "GPT-3", shortDesc: "Modelo de lenguaje con 175B parámetros, few-shot learning sorprendente.", longDesc: "OpenAI lanzó GPT-3, capaz de realizar tareas con pocos ejemplos, desde programación hasta escritura creativa. Demostró que escalar datos y parámetros llevaba a capacidades emergentes. Abrió la era de los grandes modelos de lenguaje (LLMs).", category: "llm", era: "Escala", icon: "bi bi-stars", color: "#f1c40f" },
+        { year: "2022", title: "ChatGPT y DALL-E 2", shortDesc: "Adopción masiva de IA generativa en el mundo.", longDesc: "ChatGPT alcanzó 100M usuarios en 2 meses, la adopción tecnológica más rápida. DALL-E 2, Midjourney y Stable Diffusion democratizaron la generación de imágenes desde texto. La IA pasó de laboratorios a la vida cotidiana, impulsando debate ético y regulatorio.", category: "llm", era: "Generativo", icon: "bi bi-magic", color: "#e67e22" },
+        { year: "2023", title: "GPT-4 y Modelos Multimodales", shortDesc: "IA con visión + texto y capacidades avanzadas de razonamiento.", longDesc: "GPT-4 acepta imágenes y texto, con desempeño en exámenes profesionales y razonamiento complejo. Claude, Llama 2, Mistral democratizan alternativas open-source. Surge el concepto de IA multimodal y agentes autónomos.", category: "llm", era: "Multimodal", icon: "bi bi-gem", color: "#9b59b6" },
+        { year: "2025-2026", title: "Agentes Autónomos & Razonamiento", shortDesc: "La próxima frontera: IA con memoria a largo plazo y planificación.", longDesc: "Investigación actual en agentes que ejecutan tareas complejas (AutoGPT, Devin, etc.). Se avanza hacia modelos con razonamiento profundo, integración con el mundo real y primeros destellos de AGI (Inteligencia Artificial General). Eficiencia computacional y alineamiento ético son desafíos clave.", category: "llm", era: "Futuro", icon: "bi bi-rocket-takeoff", color: "#d35400" }
+    ];
+
+    let currentFilter = "all";
+
+    function renderTimeline() {
+        const container = document.getElementById("timelineContainer");
+        if (!container) return;
+        let filtered = timelineData.filter(item => currentFilter === "all" ? true : item.category === currentFilter);
+        filtered.sort((a,b) => parseInt(a.year) - parseInt(b.year));
+        
+        let html = '';
+        let lastDecade = '';
+        filtered.forEach(item => {
+            let yearNum = parseInt(item.year);
+            let decade = Math.floor(yearNum / 10) * 10 + "s";
+            if (decade !== lastDecade) {
+                lastDecade = decade;
+                html += `<div class="col-12"><div class="decade-marker"><i class="bi bi-calendar3 me-2"></i>${decade}</div></div>`;
+            }
+            let catLabel = '';
+            if(item.category === 'filosofia') catLabel = '🧠 Filosofía/Inicios';
+            else if(item.category === 'auge') catLabel = '📈 Auge tecnológico';
+            else if(item.category === 'invierno') catLabel = '❄️ Invierno IA';
+            else if(item.category === 'deep') catLabel = '⚡ Deep Learning';
+            else if(item.category === 'llm') catLabel = '🚀 Grandes Modelos';
+            else catLabel = '🔍 Hito';
+            
+            html += `
+                <div class="col-md-6 col-lg-4 d-flex">
+                    <div class="timeline-card card w-100 p-3" data-hito='${JSON.stringify(item).replace(/'/g, "&#39;")}'>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="category-badge">${catLabel}</span>
+                                <i class="${item.icon} fs-3 icon-hover" style="color: ${item.color}"></i>
+                            </div>
+                            <div class="year-badge-large">${item.year}</div>
+                            <h4 class="card-title fw-bold mt-1">${item.title}</h4>
+                            <p class="card-text text-secondary mt-2">${item.shortDesc}</p>
+                            <div class="mt-2">
+                                <small class="text-success fw-semibold"><i class="bi bi-info-circle"></i> Haz clic para explicación completa</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        if(filtered.length === 0) html = `<div class="col-12 text-center py-5"><i class="bi bi-emoji-frown fs-1"></i><h4>No hay hitos en esta categoría</h4></div>`;
+        container.innerHTML = html;
+
+        document.querySelectorAll('.timeline-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                const rawData = card.getAttribute('data-hito');
+                if(rawData) {
+                    try {
+                        const hito = JSON.parse(rawData);
+                        showDetailModal(hito);
+                    } catch(err) { console.warn(err); }
+                }
+            });
+        });
+    }
+
+    function showDetailModal(hito) {
+        const modalBody = document.getElementById("modalBodyContent");
+        if(!modalBody) return;
+        const categoriaMap = {
+            filosofia: "🧠 Filosofía & Inicios", auge: "📈 Auge tecnológico", invierno: "❄️ Invierno IA", deep: "⚡ Deep Learning", llm: "🚀 Grandes Modelos"
+        };
+        const categoriaDisplay = categoriaMap[hito.category] || "Hito histórico";
+        modalBody.innerHTML = `
+            <div class="mb-3">
+                <span class="badge bg-success bg-opacity-25 text-dark p-2 rounded-pill">${categoriaDisplay}</span>
+                <span class="badge bg-secondary bg-opacity-10 ms-2 p-2">Era: ${hito.era}</span>
+            </div>
+            <h2 class="fw-bold display-6">${hito.title} <span class="fs-2 text-muted">(${hito.year})</span></h2>
+            <div class="my-3 p-3 bg-light rounded-4">
+                <i class="${hito.icon} fs-3 me-2" style="color: ${hito.color}"></i>
+                <p class="lead d-inline-block mb-0">${hito.shortDesc}</p>
+            </div>
+            <h5 class="fw-bold mt-3"><i class="bi bi-book-half"></i> Explicación detallada</h5>
+            <p class="mt-2">${hito.longDesc}</p>
+        `;
+        const modal = new bootstrap.Modal(document.getElementById('detailModal'));
+        modal.show();
+    }
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.getAttribute('data-filter');
+            renderTimeline();
+        });
+    });
+
+    const scrollBtn = document.getElementById('scrollTopBtn');
+    window.addEventListener('scroll', () => {
+        if(window.scrollY > 400) scrollBtn.classList.add('show');
+        else scrollBtn.classList.remove('show');
+    });
+    scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if(href === "#" || href === "") return;
+            const target = document.querySelector(href);
+            if(target) {
+                e.preventDefault();
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    renderTimeline();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
